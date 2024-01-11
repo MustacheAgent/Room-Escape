@@ -77,18 +77,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb36a55c9aafea40b81f583712d0c91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize:
-    serializedVersion: 2
-    x: -10
-    y: -10
-    width: 20
-    height: 20
-  stickMinZoom: -250
-  stickMaxZoom: -45
+  stickMinZoom: -55
+  stickMaxZoom: -25
   swivelMinZoom: 90
   swivelMaxZoom: 45
-  moveSpeedMinZoom: 400
-  moveSpeedMaxZoom: 100
+  moveSpeedMinZoom: 100
+  moveSpeedMaxZoom: 25
+  movementSmoothingSpeed: 10
+  rotationSpeed: 100
+  rotationSmoothingSpeed: 10
 --- !u!1 &1317843541989672241
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 1317843541989672241}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -45}
+  m_LocalPosition: {x: 0, y: 0, z: -25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
