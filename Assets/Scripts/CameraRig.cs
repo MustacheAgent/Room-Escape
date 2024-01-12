@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,10 +20,13 @@ public class CameraRig : MonoBehaviour
     public float movementSmoothingSpeed = 10f;
     
     private Vector3 _rawMovementInput, _smoothMovementInput;
+    private Vector3 _targetPosition;
         
     [Header("Rotation")]
     public float rotationSpeed = 100f;
     public float rotationSmoothingSpeed = 10f;
+    public float angle = 90f;
+    
     private float _rawRotationInput, _smoothRotationInput;
     private float _rotationAngle;
     
@@ -38,6 +42,8 @@ public class CameraRig : MonoBehaviour
         _swivel = transform.GetChild(0);
         _stick = _swivel.GetChild(0);
         _camera = _stick.GetChild(0);
+        
+        _rotationAngle = transform.rotation.y;
 
         _playerIput = new PlayerInput();
     }
@@ -45,23 +51,20 @@ public class CameraRig : MonoBehaviour
     private void OnEnable()
     {
         _movement = _playerIput.CameraControls.Movement;
-        _rotation = _playerIput.CameraControls.Rotate;
+        _playerIput.CameraControls.Rotate.performed += OnRotate;
         _zoom = _playerIput.CameraControls.Zoom;
         _playerIput.CameraControls.Enable();
     }
 
     private void OnDisable()
     {
+        _playerIput.CameraControls.Rotate.performed -= OnRotate;
         _playerIput.CameraControls.Disable();
     }
 
     private void Update()
     {
         GetInput();
-        
-        AdjustPosition(_smoothMovementInput);
-        AdjustRotation(_smoothRotationInput);
-        AdjustZoom(_rawZoomInput);
     }
 
     private void GetInput()
@@ -70,23 +73,41 @@ public class CameraRig : MonoBehaviour
         var move = _movement.ReadValue<Vector2>();
         _rawMovementInput = new Vector3(move.x, 0, move.y);
         _smoothMovementInput = Vector3.Lerp(_smoothMovementInput, _rawMovementInput, Time.deltaTime * movementSmoothingSpeed);
-        
-        // rotate input
-        _rawRotationInput = _rotation.ReadValue<float>();
-        _smoothRotationInput = Mathf.Lerp(_smoothRotationInput, _rawRotationInput, Time.deltaTime * rotationSmoothingSpeed);
 
         // zoom input
         _rawZoomInput = _zoom.ReadValue<Vector2>().y;
-        Debug.Log("raw zoom: " + _rawZoomInput);
         _rawZoomInput = Mathf.Clamp(_rawZoomInput, -1, 1);
-        Debug.Log("clamped zoom: " + _rawZoomInput);
         _smoothZoomInput = Mathf.Lerp(_smoothZoomInput, _rawZoomInput, Time.deltaTime * zoomSmoothingSpeed);
     }
+
+    #region main control
+
+    private void OnRotate(InputAction.CallbackContext input)
+    {
+        var delta = input.ReadValue<float>();
+        HandleRotation(delta);
+    }
+    
+    public void SetTargetPosition(Vector3 targetPosition)
+    {
+        transform.DOMove(targetPosition, 1);
+    }
+
+    private void HandleRotation(float delta)
+    {
+        _rotationAngle += delta * angle;
+        var rotate = new Vector3(0, _rotationAngle, 0);
+        transform.DORotate(rotate, 1);
+    }
+    
+    #endregion
+
+    #region manual input
 
     private void AdjustZoom(float delta)
     {
         _currentZoom = Mathf.Clamp01(_currentZoom + delta);
-            
+        
         var distance = Mathf.Lerp(stickMinZoomHeight, stickMaxZoomHeight, _currentZoom);
         _stick.localPosition = new Vector3(0f, 0f, distance);
             
@@ -112,6 +133,8 @@ public class CameraRig : MonoBehaviour
         _rotationAngle += delta * rotationSpeed * Time.deltaTime;
         transform.localRotation = Quaternion.Euler(0f, _rotationAngle, 0f);
     }
+
+    #endregion
     
     private Vector3 CameraDirection(Vector3 movementDirection)
     {
