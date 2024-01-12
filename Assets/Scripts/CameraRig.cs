@@ -4,55 +4,40 @@ using UnityEngine.InputSystem;
 
 public class CameraRig : MonoBehaviour
 {
-    [Header("Zoom")] 
-    public float stickMinZoomHeight = -250f;
-    public float stickMaxZoomHeight = -45f;
-    public float swivelMinZoomAngle = 90f;
-    public float swivelMaxZoomAngle = 45f;
-    public float zoomSmoothingSpeed = 10f;
-    
-    private float _rawZoomInput, _smoothZoomInput;
-    private float _currentZoom = 1f;
-
-    [Header("Movement")] 
-    public float moveSpeedMinZoom = 100f;
-    public float moveSpeedMaxZoom = 25f;
-    public float movementSmoothingSpeed = 10f;
-    
-    private Vector3 _rawMovementInput, _smoothMovementInput;
-    private Vector3 _targetPosition;
-        
     [Header("Rotation")]
-    public float rotationSpeed = 100f;
-    public float rotationSmoothingSpeed = 10f;
     public float angle = 90f;
+    private bool _canRotate = true;
     
     private float _rawRotationInput, _smoothRotationInput;
     private float _rotationAngle;
     
-    // unput handling
-    private Transform _swivel, _stick, _camera;
+    private Transform _swivel; 
+    private float _swivelDefaultXAngle;
+    
+    private Transform _stick;
+    private float _stickDefaultZPos;
+    
     private PlayerInput _playerIput;
-    private InputAction _movement;
-    private InputAction _rotation;
-    private InputAction _zoom;
+
+    private Vector3 _rigDefaultPosition;
 
     private void Awake()
     {
         _swivel = transform.GetChild(0);
         _stick = _swivel.GetChild(0);
-        _camera = _stick.GetChild(0);
         
-        _rotationAngle = transform.rotation.y;
+        _rotationAngle = transform.rotation.eulerAngles.y;
+        _rigDefaultPosition = transform.position;
+
+        _swivelDefaultXAngle = _swivel.rotation.eulerAngles.x;
+        _stickDefaultZPos = _stick.localPosition.z;
 
         _playerIput = new PlayerInput();
     }
 
     private void OnEnable()
     {
-        _movement = _playerIput.CameraControls.Movement;
         _playerIput.CameraControls.Rotate.performed += OnRotate;
-        _zoom = _playerIput.CameraControls.Zoom;
         _playerIput.CameraControls.Enable();
     }
 
@@ -62,24 +47,6 @@ public class CameraRig : MonoBehaviour
         _playerIput.CameraControls.Disable();
     }
 
-    private void Update()
-    {
-        GetInput();
-    }
-
-    private void GetInput()
-    {
-        // movement input
-        var move = _movement.ReadValue<Vector2>();
-        _rawMovementInput = new Vector3(move.x, 0, move.y);
-        _smoothMovementInput = Vector3.Lerp(_smoothMovementInput, _rawMovementInput, Time.deltaTime * movementSmoothingSpeed);
-
-        // zoom input
-        _rawZoomInput = _zoom.ReadValue<Vector2>().y;
-        _rawZoomInput = Mathf.Clamp(_rawZoomInput, -1, 1);
-        _smoothZoomInput = Mathf.Lerp(_smoothZoomInput, _rawZoomInput, Time.deltaTime * zoomSmoothingSpeed);
-    }
-
     #region main control
 
     private void OnRotate(InputAction.CallbackContext input)
@@ -87,55 +54,40 @@ public class CameraRig : MonoBehaviour
         var delta = input.ReadValue<float>();
         HandleRotation(delta);
     }
-    
-    public void SetTargetPosition(Vector3 targetPosition)
-    {
-        transform.DOMove(targetPosition, 1);
-    }
 
     private void HandleRotation(float delta)
     {
+        if (!_canRotate) return;
         _rotationAngle += delta * angle;
-        var rotate = new Vector3(0, _rotationAngle, 0);
-        transform.DORotate(rotate, 1);
+        transform.DORotate(new Vector3(0, _rotationAngle, 0), 1);
     }
-    
-    #endregion
 
-    #region manual input
-
-    private void AdjustZoom(float delta)
+    /// <summary>
+    /// Look at clicked interactable object.
+    /// </summary>
+    /// <param name="obj">Interactable object.</param>
+    public void LookAt(Interactable obj)
     {
-        _currentZoom = Mathf.Clamp01(_currentZoom + delta);
+        transform.DOMove(obj.transform.position, 1);
+        _swivel.DOLocalRotate(new Vector3(obj.xAngle, 0, 0), 1);
+        _stick.DOLocalMove(new Vector3(0, 0, -obj.distance), 1);
         
-        var distance = Mathf.Lerp(stickMinZoomHeight, stickMaxZoomHeight, _currentZoom);
-        _stick.localPosition = new Vector3(0f, 0f, distance);
-            
-        var angle = Mathf.Lerp(swivelMinZoomAngle, swivelMaxZoomAngle, _currentZoom);
-        _swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
+        _canRotate = false;
     }
 
-    private void AdjustPosition(Vector3 movementInput)
+    /// <summary>
+    /// Reset camera to default position.
+    /// </summary>
+    public void ResetRig()
     {
-        float xDelta = movementInput.x, zDelta = movementInput.z;
-        
-        var damping = Mathf.Max(Mathf.Abs(xDelta), Mathf.Abs(zDelta));
-        var distance = Mathf.Lerp(moveSpeedMinZoom, moveSpeedMaxZoom, _currentZoom) * Time.deltaTime * damping;
-        var direction = transform.localRotation * new Vector3(xDelta, 0f, zDelta).normalized;
-            
-        var position = transform.localPosition;
-        position += direction * distance;
-        transform.localPosition = position;
-    }
-    
-    private void AdjustRotation(float delta) 
-    {
-        _rotationAngle += delta * rotationSpeed * Time.deltaTime;
-        transform.localRotation = Quaternion.Euler(0f, _rotationAngle, 0f);
+        transform.DOMove(_rigDefaultPosition, 1);
+        _swivel.DOLocalRotate(new Vector3(_swivelDefaultXAngle, 0, 0), 1);
+        _stick.DOLocalMove(new Vector3(0, 0, _stickDefaultZPos), 1);
+        _canRotate = true;
     }
 
     #endregion
-    
+
     private Vector3 CameraDirection(Vector3 movementDirection)
     {
         var cameraForward = transform.forward;

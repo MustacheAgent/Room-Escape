@@ -156,6 +156,54 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""InteractControls"",
+            ""id"": ""e04534ca-7fe2-4fc2-9703-1f18ac3fe8e5"",
+            ""actions"": [
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Button"",
+                    ""id"": ""153266e5-65cc-439b-bac4-e1aac937acb6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Return"",
+                    ""type"": ""Button"",
+                    ""id"": ""51dac4f0-d3b4-417e-bf85-b2be9222adcf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""3fe4cf71-b3d6-478f-a388-8b0854982a32"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""23502eb2-b979-491c-bae2-8cb319d8a54a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Return"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -177,6 +225,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_CameraControls_Movement = m_CameraControls.FindAction("Movement", throwIfNotFound: true);
         m_CameraControls_Rotate = m_CameraControls.FindAction("Rotate", throwIfNotFound: true);
         m_CameraControls_Zoom = m_CameraControls.FindAction("Zoom", throwIfNotFound: true);
+        // InteractControls
+        m_InteractControls = asset.FindActionMap("InteractControls", throwIfNotFound: true);
+        m_InteractControls_Select = m_InteractControls.FindAction("Select", throwIfNotFound: true);
+        m_InteractControls_Return = m_InteractControls.FindAction("Return", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -296,6 +348,60 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         }
     }
     public CameraControlsActions @CameraControls => new CameraControlsActions(this);
+
+    // InteractControls
+    private readonly InputActionMap m_InteractControls;
+    private List<IInteractControlsActions> m_InteractControlsActionsCallbackInterfaces = new List<IInteractControlsActions>();
+    private readonly InputAction m_InteractControls_Select;
+    private readonly InputAction m_InteractControls_Return;
+    public struct InteractControlsActions
+    {
+        private @PlayerInput m_Wrapper;
+        public InteractControlsActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Select => m_Wrapper.m_InteractControls_Select;
+        public InputAction @Return => m_Wrapper.m_InteractControls_Return;
+        public InputActionMap Get() { return m_Wrapper.m_InteractControls; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InteractControlsActions set) { return set.Get(); }
+        public void AddCallbacks(IInteractControlsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_InteractControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InteractControlsActionsCallbackInterfaces.Add(instance);
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
+            @Return.started += instance.OnReturn;
+            @Return.performed += instance.OnReturn;
+            @Return.canceled += instance.OnReturn;
+        }
+
+        private void UnregisterCallbacks(IInteractControlsActions instance)
+        {
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
+            @Return.started -= instance.OnReturn;
+            @Return.performed -= instance.OnReturn;
+            @Return.canceled -= instance.OnReturn;
+        }
+
+        public void RemoveCallbacks(IInteractControlsActions instance)
+        {
+            if (m_Wrapper.m_InteractControlsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IInteractControlsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_InteractControlsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_InteractControlsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public InteractControlsActions @InteractControls => new InteractControlsActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -310,5 +416,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnRotate(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
+    }
+    public interface IInteractControlsActions
+    {
+        void OnSelect(InputAction.CallbackContext context);
+        void OnReturn(InputAction.CallbackContext context);
     }
 }

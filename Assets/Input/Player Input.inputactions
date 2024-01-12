@@ -134,6 +134,54 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "InteractControls",
+            "id": "e04534ca-7fe2-4fc2-9703-1f18ac3fe8e5",
+            "actions": [
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "153266e5-65cc-439b-bac4-e1aac937acb6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Return",
+                    "type": "Button",
+                    "id": "51dac4f0-d3b4-417e-bf85-b2be9222adcf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3fe4cf71-b3d6-478f-a388-8b0854982a32",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "23502eb2-b979-491c-bae2-8cb319d8a54a",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Return",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
