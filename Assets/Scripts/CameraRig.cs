@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,10 +6,9 @@ using UnityEngine.InputSystem;
 public class CameraRig : MonoBehaviour
 {
     [Header("Rotation")]
-    public float angle = 90f;
+    [SerializeField] private float angle = 90f;
     private bool _canRotate = true;
     
-    private float _rawRotationInput, _smoothRotationInput;
     private float _rotationAngle;
     
     private Transform _swivel; 
@@ -17,9 +17,11 @@ public class CameraRig : MonoBehaviour
     private Transform _stick;
     private float _stickDefaultZPos;
     
+    private Vector3 _rigDefaultPosition;
+    
     private PlayerInput _playerIput;
 
-    private Vector3 _rigDefaultPosition;
+    public event Action<float> OnManualRotate;
 
     private void Awake()
     {
@@ -35,6 +37,8 @@ public class CameraRig : MonoBehaviour
         _playerIput = new PlayerInput();
     }
 
+    #region Enable/Disable
+
     private void OnEnable()
     {
         _playerIput.CameraControls.Rotate.performed += OnRotate;
@@ -47,7 +51,9 @@ public class CameraRig : MonoBehaviour
         _playerIput.CameraControls.Disable();
     }
 
-    #region main control
+    #endregion
+
+    #region Main control
 
     private void OnRotate(InputAction.CallbackContext input)
     {
@@ -59,6 +65,8 @@ public class CameraRig : MonoBehaviour
     {
         if (!_canRotate) return;
         _rotationAngle += delta * angle;
+        _rotationAngle = Mathf.Repeat(_rotationAngle, 360);
+        OnManualRotate?.Invoke(_rotationAngle);
         transform.DORotate(new Vector3(0, _rotationAngle, 0), 1);
     }
 
@@ -68,10 +76,16 @@ public class CameraRig : MonoBehaviour
     /// <param name="obj">Interactable object.</param>
     public void LookAt(Interactable obj)
     {
+        // move rig root to object position
         transform.DOMove(obj.transform.position, 1);
+        
+        // rotate swivel x axis to look approximately on object
         _swivel.DOLocalRotate(new Vector3(obj.xAngle, 0, 0), 1);
+        
+        // move stick z axis to zoom in on object
         _stick.DOLocalMove(new Vector3(0, 0, -obj.distance), 1);
         
+        // disable rig rotation
         _canRotate = false;
     }
 
@@ -87,18 +101,4 @@ public class CameraRig : MonoBehaviour
     }
 
     #endregion
-
-    private Vector3 CameraDirection(Vector3 movementDirection)
-    {
-        var cameraForward = transform.forward;
-        var cameraRight = transform.right;
-
-        cameraForward.y = 0f;
-        cameraRight.y = 0f;
-
-        var direction = cameraForward * movementDirection.z + cameraRight * movementDirection.x;
-        direction.y = movementDirection.y;
-
-        return direction;
-    }
 }
