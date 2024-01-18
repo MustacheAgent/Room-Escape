@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class CameraRig : MonoBehaviour
 {
     [Header("Rotation")]
-    [SerializeField] private float angle = 90f;
+    [SerializeField] public float angle = 90f;
     private bool _canRotate = true;
     
     private float _rotationAngle;
