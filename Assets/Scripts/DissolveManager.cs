@@ -1,25 +1,28 @@
 ﻿using System.Collections.Generic;
+using EventBusSystem;
+using Events;
 using UnityEngine;
 
-public class DissolveManager : MonoBehaviour
+public class DissolveManager : MonoBehaviour, ICameraRotate
 {
-    [SerializeField] private CameraRig cameraRig;
     [SerializeField] private List<Sector> sectors;
 
-    private float _angleStep;
-
-    private void Awake()
+    private void OnEnable()
     {
-        _angleStep = cameraRig.angle;
-        cameraRig.OnManualRotate += CameraRotate;
+        EventBus.Subscribe(this);
     }
 
-    private void CameraRotate(float angle)
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe(this);
+    }
+
+    public void HandleRotation(float currentAngle, float angleStep)
     {
         foreach (var sector in sectors)
         {
-            var difference = Mathf.Abs(Mathf.DeltaAngle(sector.angle, angle));
-            sector.SwitchObjects(difference <= _angleStep / 2);
+            var difference = Mathf.Abs(Mathf.DeltaAngle(sector.angle, currentAngle));
+            sector.SwitchObjects(difference <= angleStep / 2);
         }
     }
 }

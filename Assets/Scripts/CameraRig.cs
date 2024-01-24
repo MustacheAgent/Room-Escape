@@ -1,5 +1,7 @@
 using System;
 using DG.Tweening;
+using EventBusSystem;
+using Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,9 +21,7 @@ public class CameraRig : MonoBehaviour
     
     private Vector3 _rigDefaultPosition;
     
-    private PlayerInput _playerIput;
-
-    public event Action<float> OnManualRotate;
+    private PlayerInput _playerInput;
 
     private void Awake()
     {
@@ -34,21 +34,21 @@ public class CameraRig : MonoBehaviour
         _swivelDefaultXAngle = _swivel.rotation.eulerAngles.x;
         _stickDefaultZPos = _stick.localPosition.z;
 
-        _playerIput = new PlayerInput();
+        _playerInput = new PlayerInput();
     }
 
     #region Enable/Disable
 
     private void OnEnable()
     {
-        _playerIput.CameraControls.Rotate.performed += OnRotate;
-        _playerIput.CameraControls.Enable();
+        _playerInput.CameraControls.Rotate.performed += OnRotate;
+        _playerInput.CameraControls.Enable();
     }
 
     private void OnDisable()
     {
-        _playerIput.CameraControls.Rotate.performed -= OnRotate;
-        _playerIput.CameraControls.Disable();
+        _playerInput.CameraControls.Rotate.performed -= OnRotate;
+        _playerInput.CameraControls.Disable();
     }
 
     #endregion
@@ -66,7 +66,8 @@ public class CameraRig : MonoBehaviour
         if (!_canRotate) return;
         _rotationAngle += delta * angle;
         _rotationAngle = Mathf.Repeat(_rotationAngle, 360);
-        OnManualRotate?.Invoke(_rotationAngle);
+        EventBus.Raise<ICameraRotate>(h => h.HandleRotation(_rotationAngle, angle));
+        
         transform.DORotate(new Vector3(0, _rotationAngle, 0), 1);
     }
 
