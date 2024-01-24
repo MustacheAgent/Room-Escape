@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using EventBusSystem;
 using Events;
@@ -9,8 +8,8 @@ public class CameraRig : MonoBehaviour
 {
     [Header("Rotation")]
     [SerializeField] public float angle = 90f;
-    private bool _canRotate = true;
     
+    private bool _canRotate = true;
     private float _rotationAngle;
     
     private Transform _swivel; 
