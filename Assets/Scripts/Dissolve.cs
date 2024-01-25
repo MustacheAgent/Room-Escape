@@ -7,7 +7,7 @@ public class Dissolve : MonoBehaviour
     
     private Material _mat;
     
-    private void Start()
+    private void Awake()
     {
         _mat = GetComponent<Renderer>().material;
     }

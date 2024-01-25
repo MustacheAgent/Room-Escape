@@ -1,10 +1,13 @@
+using System;
 using DG.Tweening;
 using EventBusSystem;
 using Events;
+using Events.CameraEvents;
+using Rooms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraRig : MonoBehaviour
+public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged
 {
     [Header("Rotation")]
     [SerializeField] public float angle = 90f;
@@ -36,18 +39,27 @@ public class CameraRig : MonoBehaviour
         _playerInput = new PlayerInput();
     }
 
+    private void Start()
+    {
+        EventBus.Raise<ICameraRotate>(h => h.OnCameraRotation(_rotationAngle, angle));
+    }
+
     #region Enable/Disable
 
     private void OnEnable()
     {
         _playerInput.CameraControls.Rotate.performed += OnRotate;
         _playerInput.CameraControls.Enable();
+        
+        EventBus.Subscribe(this);
     }
 
     private void OnDisable()
     {
         _playerInput.CameraControls.Rotate.performed -= OnRotate;
         _playerInput.CameraControls.Disable();
+
+        EventBus.Unsubscribe(this);
     }
 
     #endregion
@@ -65,7 +77,7 @@ public class CameraRig : MonoBehaviour
         if (!_canRotate) return;
         _rotationAngle += delta * angle;
         _rotationAngle = Mathf.Repeat(_rotationAngle, 360);
-        EventBus.Raise<ICameraRotate>(h => h.HandleRotation(_rotationAngle, angle));
+        EventBus.Raise<ICameraRotate>(h => h.OnCameraRotation(_rotationAngle, angle));
         
         transform.DORotate(new Vector3(0, _rotationAngle, 0), 1);
     }
@@ -98,6 +110,12 @@ public class CameraRig : MonoBehaviour
         _swivel.DOLocalRotate(new Vector3(_swivelDefaultXAngle, 0, 0), 1);
         _stick.DOLocalMove(new Vector3(0, 0, _stickDefaultZPos), 1);
         _canRotate = true;
+    }
+
+    public void OnRoomChanged(Room newRoom)
+    {
+        _rigDefaultPosition = newRoom.transform.position;
+        ResetRig();
     }
 
     #endregion
