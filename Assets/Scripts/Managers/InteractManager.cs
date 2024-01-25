@@ -1,8 +1,5 @@
-﻿using System;
-using EventBusSystem;
-using Events;
+﻿using EventBusSystem;
 using Events.CameraEvents;
-using Rooms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,8 +7,6 @@ namespace Managers
 {
     public class InteractManager : MonoBehaviour
     {
-        [SerializeField] private Room firstRoom;
-        
         public LayerMask layer;
         public CameraRig cameraRig;
     
@@ -44,17 +39,12 @@ namespace Managers
             _playerInput.InteractControls.Disable();
         }
 
-        private void Start()
-        {
-            
-        }
-
         private void OnSelect(InputAction.CallbackContext input)
         {
             var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out var hit, float.MaxValue, layer))
             {
-                HandleInteractable(hit.transform.GetComponent<Interactable>());
+                HandleInteractable(hit.transform.GetComponent<IInteractable>());
             }
         }
 
@@ -63,12 +53,9 @@ namespace Managers
             EventBus.Raise<ICameraReset>(h => h.ResetRig());
         }
 
-        private void HandleInteractable(Interactable obj)
+        private void HandleInteractable(IInteractable obj)
         {
-            if (obj == null) return;
-        
-            // look at interactable
-            cameraRig.LookAt(obj);
+            obj?.Interact();
         }
     }
 }

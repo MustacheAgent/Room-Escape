@@ -116,6 +116,7 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged
     {
         _rigDefaultPosition = newRoom.transform.position;
         ResetRig();
+        EventBus.Raise<ICameraRotate>(h => h.OnCameraRotation(_rotationAngle, angle));
     }
 
     #endregion
