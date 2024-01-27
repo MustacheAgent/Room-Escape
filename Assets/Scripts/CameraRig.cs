@@ -1,13 +1,13 @@
-using System;
 using DG.Tweening;
 using EventBusSystem;
 using Events;
 using Events.CameraEvents;
+using InteractObjects;
 using Rooms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged
+public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookAt
 {
     [Header("Rotation")]
     [SerializeField] public float angle = 90f;
@@ -86,7 +86,7 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged
     /// Look at clicked interactable object.
     /// </summary>
     /// <param name="obj">Interactable object.</param>
-    public void LookAt(Interactable obj)
+    public void LookAt(InteractableObject obj)
     {
         // move rig root to object position
         transform.DOMove(obj.transform.position, 1);

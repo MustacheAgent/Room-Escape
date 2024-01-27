@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Rooms
 {
-    public class MoveToRoom : MonoBehaviour, IInteractable
+    public class InteractableDoor : MonoBehaviour, IInteractable
     {
         [SerializeField] private Room roomToMove;
         

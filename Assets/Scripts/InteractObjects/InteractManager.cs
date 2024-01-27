@@ -3,13 +3,12 @@ using Events.CameraEvents;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Managers
+namespace InteractObjects
 {
     public class InteractManager : MonoBehaviour
     {
         public LayerMask layer;
-        public CameraRig cameraRig;
-    
+
         private PlayerInput _playerInput;
         private InputAction _interaction;
         private InputAction _return;
@@ -44,18 +43,13 @@ namespace Managers
             var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             if (Physics.Raycast(ray, out var hit, float.MaxValue, layer))
             {
-                HandleInteractable(hit.transform.GetComponent<IInteractable>());
+                hit.transform.GetComponent<IInteractable>()?.Interact();
             }
         }
 
         private void OnReturn(InputAction.CallbackContext input)
         {
             EventBus.Raise<ICameraReset>(h => h.ResetRig());
-        }
-
-        private void HandleInteractable(IInteractable obj)
-        {
-            obj?.Interact();
         }
     }
 }
