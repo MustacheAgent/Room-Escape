@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5168,19 +5168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aed93bd46bd4c0b803b904561eb4dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sectors:
-  - angle: 0
-    dissolveObjects:
-    - {fileID: 1052709922}
-  - angle: 90
-    dissolveObjects:
-    - {fileID: 525864652}
-  - angle: 180
-    dissolveObjects:
-    - {fileID: 366207299}
-  - angle: 270
-    dissolveObjects:
-    - {fileID: 1174533492}
+  sectors: []
 --- !u!1 &1028342587
 GameObject:
   m_ObjectHideFlags: 0
@@ -5709,19 +5697,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sectors:
-  - angle: 0
-    dissolveObjects:
-    - {fileID: 323886390}
-  - angle: 90
-    dissolveObjects:
-    - {fileID: 1661398669}
-  - angle: 180
-    dissolveObjects:
-    - {fileID: 972373385}
-  - angle: 270
-    dissolveObjects:
-    - {fileID: 1723554953}
-    - {fileID: 1028342593}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1174533485
 GameObject:
   m_ObjectHideFlags: 0

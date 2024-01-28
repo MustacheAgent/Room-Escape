@@ -6,19 +6,10 @@ public class Dissolve : MonoBehaviour
     [SerializeField] private float duration = 2f;
     
     private Material _mat;
-    
-    private void Awake()
-    {
-        _mat = GetComponent<Renderer>().material;
-    }
 
-    public void Show()
+    public void Switch(bool hide)
     {
-        _mat.DOFloat(0, "_AlphaClip", duration);
-    }
-    
-    public void Hide()
-    {
-        _mat.DOFloat(1, "_AlphaClip", duration);
+        if (!_mat) _mat = GetComponent<Renderer>().material;
+        _mat.DOFloat(hide ? 1 : 0, "_AlphaClip", duration);
     }
 }

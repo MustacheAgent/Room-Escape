@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Rooms
 {
-    [Serializable]
-    public class Sector
+    public class Sector : MonoBehaviour
     {
         public float angle;
         public List<Dissolve> dissolveObjects;
@@ -13,8 +13,7 @@ namespace Rooms
         {
             foreach (var obj in dissolveObjects)
             {
-                if (hide) obj.Hide();
-                else obj.Show();
+                obj.Switch(hide);
             }
         }
     }

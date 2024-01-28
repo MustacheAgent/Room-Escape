@@ -22,9 +22,13 @@ namespace Managers
             EventBus.Unsubscribe(this);
         }
 
-        private void Start()
+        private void Awake()
         {
             _currentRoom = firstRoom;
+        }
+
+        private void Start()
+        {
             EventBus.Raise<IRoomChanged>(h => h.OnRoomChanged(firstRoom));
         }
 
