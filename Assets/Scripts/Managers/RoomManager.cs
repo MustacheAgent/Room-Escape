@@ -10,7 +10,9 @@ namespace Managers
     {
         [SerializeField] private Room firstRoom;
     
-        private Room _currentRoom;
+        public Room _currentRoom;
+
+        public float _currentAngle, _angleStep;
 
         private void OnEnable()
         {
@@ -37,11 +39,14 @@ namespace Managers
             _currentRoom.gameObject.SetActive(false);
             _currentRoom = newRoom;
             _currentRoom.gameObject.SetActive(true);
+            _currentRoom.DissolveSectors(_currentAngle, _angleStep);
         }
 
         public void OnCameraRotation(float currentAngle, float angleStep)
         {
-            _currentRoom.DissolveSectors(currentAngle, angleStep);
+            _currentAngle = currentAngle;
+            _angleStep = angleStep;
+            _currentRoom.DissolveSectors(_currentAngle, _angleStep);
         }
     }
 }

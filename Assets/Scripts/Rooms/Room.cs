@@ -1,29 +1,29 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Rooms
 {
     public class Room : MonoBehaviour
     {
-        [SerializeField] private List<Sector> sectors;
+        public Sector[] _sectors;
 
         private void Awake()
         {
+            _sectors = GetComponentsInChildren<Sector>();
             gameObject.SetActive(false);
         }
 
         public void DissolveSectors(float currentAngle, float angleStep)
         {
-            foreach (var sector in sectors)
+            foreach (var sector in _sectors)
             {
-                var difference = Mathf.Abs(Mathf.DeltaAngle(sector.angle, currentAngle));
-                sector.SwitchObjects(difference <= angleStep / 2);
+                var angleBetween = Mathf.Abs(Mathf.DeltaAngle(sector.transform.eulerAngles.y, currentAngle));
+                sector.SwitchObjects(angleBetween <= angleStep / 2);
             }
         }
 
         public void SwitchRoom(bool hide)
         {
-            foreach (var sector in sectors)
+            foreach (var sector in _sectors)
             {
                 sector.SwitchObjects(hide);
             }
