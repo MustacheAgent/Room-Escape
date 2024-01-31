@@ -4,7 +4,7 @@ namespace Rooms
 {
     public class Room : MonoBehaviour
     {
-        public Sector[] _sectors;
+        private Sector[] _sectors;
 
         private void Awake()
         {
@@ -21,7 +21,7 @@ namespace Rooms
             }
         }
 
-        public void SwitchRoom(bool hide)
+        public void DissolveSectors(bool hide)
         {
             foreach (var sector in _sectors)
             {

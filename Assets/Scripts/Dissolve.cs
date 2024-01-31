@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Dissolve : MonoBehaviour
 {
-    [SerializeField] private float duration = 2f;
+    [SerializeField] private float duration = 1f;
     
     private Material _mat;
 

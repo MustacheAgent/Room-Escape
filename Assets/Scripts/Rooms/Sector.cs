@@ -1,23 +1,41 @@
-﻿using UnityEngine;
+﻿using System;
+using InteractObjects;
+using UnityEngine;
 
 namespace Rooms
 {
     public class Sector : MonoBehaviour
     {
-        //public float angle;
-
-        public Dissolve[] _children;
-
+        public Dissolve[] _dissolvables;
+        public IInteractable[] _interactables;
+        
         private void Awake()
         {
-            _children = GetComponentsInChildren<Dissolve>();
+            _dissolvables = GetComponentsInChildren<Dissolve>();
+            _interactables = GetComponentsInChildren<IInteractable>();
         }
 
+        /// <summary>
+        /// Switches sector visibility.
+        /// </summary>
+        /// <param name="hide">True if sector must dissolve, otherwise false.</param>
         public void SwitchObjects(bool hide)
         {
-            foreach (var obj in _children)
+            try
             {
-                obj.Switch(hide);
+                foreach (var obj in _dissolvables)
+                {
+                    obj.Switch(hide);
+                }
+            
+                foreach (var interactable in _interactables)
+                {
+                    interactable.Enabled = !hide;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e + " ==== " + gameObject);
             }
         }
     }

@@ -41,10 +41,11 @@ namespace InteractObjects
         private void OnSelect(InputAction.CallbackContext input)
         {
             var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            if (Physics.Raycast(ray, out var hit, float.MaxValue, layer))
-            {
-                hit.transform.GetComponent<IInteractable>()?.Interact();
-            }
+            
+            if (!Physics.Raycast(ray, out var hit, float.MaxValue, layer)) return;
+            
+            var obj = hit.transform.GetComponent<IInteractable>();
+            if (obj != null && obj.Enabled) obj.Interact();
         }
 
         private void OnReturn(InputAction.CallbackContext input)

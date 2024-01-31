@@ -1,4 +1,8 @@
-﻿public interface IInteractable
+﻿namespace InteractObjects
 {
-    public void Interact();
+    public interface IInteractable
+    {
+        public bool Enabled { get; set; }
+        public void Interact();
+    }
 }

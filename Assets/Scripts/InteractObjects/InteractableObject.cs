@@ -8,7 +8,9 @@ namespace InteractObjects
     {
         public float xAngle;
         public float distance;
-        
+
+        public bool Enabled { get; set; }
+
         public void Interact()
         {
             EventBus.Raise<ICameraLookAt>(h => h.LookAt(this));
