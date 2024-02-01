@@ -1,6 +1,7 @@
 ﻿using EventBusSystem;
 using Events;
 using Events.CameraEvents;
+using Events.RoomEvents;
 using Rooms;
 using UnityEngine;
 

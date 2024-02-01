@@ -1,7 +1,7 @@
 ﻿using EventBusSystem;
 using Rooms;
 
-namespace Events
+namespace Events.RoomEvents
 {
     public interface IRoomChanged : IGlobalSubscriber
     {

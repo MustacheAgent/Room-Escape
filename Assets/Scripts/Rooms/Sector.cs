@@ -6,8 +6,8 @@ namespace Rooms
 {
     public class Sector : MonoBehaviour
     {
-        public Dissolve[] _dissolvables;
-        public IInteractable[] _interactables;
+        private Dissolve[] _dissolvables;
+        private IInteractable[] _interactables;
         
         private void Awake()
         {

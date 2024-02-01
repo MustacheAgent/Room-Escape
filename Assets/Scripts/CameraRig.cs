@@ -2,15 +2,16 @@ using DG.Tweening;
 using EventBusSystem;
 using Events;
 using Events.CameraEvents;
+using Events.RoomEvents;
 using InteractObjects;
 using Rooms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookAt
+public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookAt, ICameraLoopPosition
 {
     [Header("Rotation")]
-    [SerializeField] public float angle = 90f;
+    [SerializeField] private float angle = 90f;
     
     private bool _canRotate = true;
     private float _rotationAngle;
@@ -20,18 +21,20 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
     
     private Transform _stick;
     private float _stickDefaultZPos;
-    
+
+    private Transform _transform;
     private Vector3 _rigDefaultPosition;
     
     private PlayerInput _playerInput;
 
     private void Awake()
     {
-        _swivel = transform.GetChild(0);
+        _transform = transform;
+        _swivel = _transform.GetChild(0);
         _stick = _swivel.GetChild(0);
         
-        _rotationAngle = transform.rotation.eulerAngles.y;
-        _rigDefaultPosition = transform.position;
+        _rotationAngle = _transform.rotation.eulerAngles.y;
+        _rigDefaultPosition = _transform.position;
 
         _swivelDefaultXAngle = _swivel.rotation.eulerAngles.x;
         _stickDefaultZPos = _stick.localPosition.z;
@@ -79,7 +82,7 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
         _rotationAngle = Mathf.Repeat(_rotationAngle, 360);
         EventBus.Raise<ICameraRotate>(h => h.OnCameraRotation(_rotationAngle, angle));
         
-        transform.DORotate(new Vector3(0, _rotationAngle, 0), 1);
+        _transform.DORotate(new Vector3(0, _rotationAngle, 0), 1);
     }
 
     /// <summary>
@@ -89,7 +92,7 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
     public void LookAt(InteractableObject obj)
     {
         // move rig root to object position
-        transform.DOMove(obj.transform.position, 1);
+        _transform.DOMove(obj.transform.position, 1);
         
         // rotate swivel x axis to look approximately on object
         _swivel.DOLocalRotate(new Vector3(obj.xAngle, 0, 0), 1);
@@ -106,7 +109,7 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
     /// </summary>
     public void ResetRig()
     {
-        transform.DOMove(_rigDefaultPosition, 1);
+        _transform.DOMove(_rigDefaultPosition, 1);
         _swivel.DOLocalRotate(new Vector3(_swivelDefaultXAngle, 0, 0), 1);
         _stick.DOLocalMove(new Vector3(0, 0, _stickDefaultZPos), 1);
         _canRotate = true;
@@ -116,6 +119,18 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
     {
         _rigDefaultPosition = newRoom.transform.position;
         ResetRig();
+    }
+
+    public void LoopPosition(Transform newPosition)
+    {
+        _transform.position = newPosition.position;
+        var diff = _transform.eulerAngles.y < 0 ? angle : -angle;
+        var eylerAngles = _transform.rotation.eulerAngles;
+        eylerAngles.y += diff;
+        _rotationAngle = eylerAngles.y;
+        _transform.eulerAngles = eylerAngles;
+        
+        EventBus.Raise<ICameraRotate>(h => h.OnCameraRotation(_rotationAngle, angle));
     }
 
     #endregion
