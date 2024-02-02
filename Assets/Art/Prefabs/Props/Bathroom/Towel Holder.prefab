@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9163606050084728974}
   - component: {fileID: 8057036640768401194}
   - component: {fileID: 2386475688681594259}
+  - component: {fileID: 2150886966115777625}
   m_Layer: 0
   m_Name: Towel Holder
   m_TagString: Untagged
@@ -84,3 +85,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2150886966115777625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2923507147213136075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f23f63e0ceb7cd24d9166353534c6d66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
