@@ -11,6 +11,6 @@ public class Dissolve : MonoBehaviour
     public void SetVisible(bool hide)
     {
         if (!_mat) _mat = GetComponent<Renderer>().material;
-        _mat.DOFloat(hide ? 1 : 0, AlphaClip, duration).SetEase(Ease.Linear);
+        _mat.DOFloat(hide ? 1.1f : 0, AlphaClip, duration).SetEase(Ease.Linear);
     }
 }
