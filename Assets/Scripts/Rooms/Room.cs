@@ -17,7 +17,7 @@ namespace Rooms
             foreach (var sector in _sectors)
             {
                 var angleBetween = Mathf.Abs(Mathf.DeltaAngle(sector.transform.eulerAngles.y, currentAngle));
-                sector.SwitchObjects(angleBetween <= angleStep / 2);
+                sector.SetVisibleObjects(angleBetween <= angleStep / 2);
             }
         }
 
@@ -25,7 +25,7 @@ namespace Rooms
         {
             foreach (var sector in _sectors)
             {
-                sector.SwitchObjects(hide);
+                sector.SetVisibleObjects(hide);
             }
         }
     }

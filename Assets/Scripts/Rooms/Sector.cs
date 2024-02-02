@@ -16,21 +16,21 @@ namespace Rooms
         }
 
         /// <summary>
-        /// Switches sector visibility.
+        /// Sets sector visibility.
         /// </summary>
         /// <param name="hide">True if sector must dissolve, otherwise false.</param>
-        public void SwitchObjects(bool hide)
+        public void SetVisibleObjects(bool hide)
         {
             try
             {
                 foreach (var obj in _dissolvables)
                 {
-                    obj.Switch(hide);
+                    obj.SetVisible(hide);
                 }
             
                 foreach (var interactable in _interactables)
                 {
-                    interactable.Enabled = !hide;
+                    interactable.SetActive(!hide);
                 }
             }
             catch (Exception e)
