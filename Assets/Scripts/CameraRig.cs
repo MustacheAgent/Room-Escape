@@ -1,6 +1,5 @@
 using DG.Tweening;
 using EventBusSystem;
-using Events;
 using Events.CameraEvents;
 using Events.RoomEvents;
 using InteractObjects;
@@ -86,19 +85,19 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
     }
 
     /// <summary>
-    /// Look at clicked interactable object.
+    /// Look at clicked interactable container.
     /// </summary>
-    /// <param name="obj">Interactable object.</param>
-    public void LookAt(InteractableObject obj)
+    /// <param name="obj">Interactable container.</param>
+    public void LookAt(InteractableContainer obj)
     {
         // move rig root to object position
         _transform.DOMove(obj.transform.position, 1);
         
         // rotate swivel x axis to look approximately on object
-        _swivel.DOLocalRotate(new Vector3(obj.xAngle, 0, 0), 1);
+        _swivel.DOLocalRotate(new Vector3(obj.Angle, 0, 0), 1);
         
         // move stick z axis to zoom in on object
-        _stick.DOLocalMove(new Vector3(0, 0, -obj.distance), 1);
+        _stick.DOLocalMove(new Vector3(0, 0, -obj.Distance), 1);
         
         // disable rig rotation
         _canRotate = false;

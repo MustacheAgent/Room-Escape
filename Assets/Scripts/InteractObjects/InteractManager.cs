@@ -1,4 +1,5 @@
-﻿using EventBusSystem;
+﻿using System.Collections.Generic;
+using EventBusSystem;
 using Events.CameraEvents;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +15,9 @@ namespace InteractObjects
         private InputAction _return;
     
         private Camera _mainCamera;
+
+        private Stack<InteractableContainer> _containers;
+        private InteractableContainer _currentContainer;
     
         private void Awake()
         {
@@ -22,6 +26,8 @@ namespace InteractObjects
             _return = _playerInput.InteractControls.Return;
 
             _mainCamera = Camera.main;
+
+            _containers = new Stack<InteractableContainer>();
         }
 
         private void OnEnable()
@@ -42,15 +48,40 @@ namespace InteractObjects
         {
             var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
             
-            if (!Physics.Raycast(ray, out var hit, float.MaxValue, layer)) return;
+            if (!Physics.Raycast(ray, out var hit, float.MaxValue, layer))
+            {
+                Debug.Log("No hit");
+                return;
+            }
             
             var obj = hit.transform.GetComponent<IInteractable>();
-            if (obj != null && obj.Enabled) obj.Interact();
+            if (obj != null && obj.Enabled)
+            {
+                _currentContainer = hit.transform.GetComponent<InteractableContainer>();
+                if (_currentContainer) _containers.Push(_currentContainer);
+                obj.Interact();
+                Debug.Log("interactable: " + hit.transform.gameObject);
+            }
         }
 
         private void OnReturn(InputAction.CallbackContext input)
         {
-            EventBus.Raise<ICameraReset>(h => h.ResetRig());
+            if (_containers.Count > 0)
+            {
+                var obj = _containers.Pop();
+                if (obj != null)
+                {
+                    obj.SetChildrenActive(false);
+                    obj.SetEnabled(true);
+                    EventBus.Raise<ICameraLookAt>(h => h.LookAt(obj));
+                }
+            }
+            else
+            {
+                _currentContainer.SetChildrenActive(false);
+                _currentContainer.SetEnabled(true);
+                EventBus.Raise<ICameraReset>(h => h.ResetRig());
+            }
         }
     }
 }

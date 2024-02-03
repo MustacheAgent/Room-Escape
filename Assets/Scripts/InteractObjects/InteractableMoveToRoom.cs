@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace InteractObjects
 {
-    public class InteractableDoor : MonoBehaviour, IInteractable
+    public class InteractableMoveToRoom : MonoBehaviour, IInteractable
     {
         [SerializeField] private Room roomToMove;
 
@@ -30,7 +30,7 @@ namespace InteractObjects
             EventBus.Raise<IRoomChanged>(h => h.OnRoomChanged(roomToMove));
         }
 
-        public void SetActive(bool active)
+        public void SetEnabled(bool active)
         {
             _collider.enabled = active;
         }

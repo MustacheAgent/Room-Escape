@@ -5,6 +5,6 @@ namespace Events.CameraEvents
 {
     public interface ICameraLookAt : IGlobalSubscriber
     {
-        public void LookAt(InteractableObject obj);
+        public void LookAt(InteractableContainer obj);
     }
 }

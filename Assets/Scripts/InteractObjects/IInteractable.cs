@@ -7,6 +7,6 @@ namespace InteractObjects
         public bool Enabled { get; }
 
         public void Interact();
-        public void SetActive(bool active);
+        public void SetEnabled(bool isEnabled);
     }
 }

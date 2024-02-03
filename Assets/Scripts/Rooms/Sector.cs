@@ -30,12 +30,12 @@ namespace Rooms
             
                 foreach (var interactable in _interactables)
                 {
-                    interactable.SetActive(!hide);
+                    interactable.SetEnabled(!hide);
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError(e + " ==== " + gameObject);
+                //Debug.LogError(e + " ==== " + gameObject);
             }
         }
     }
