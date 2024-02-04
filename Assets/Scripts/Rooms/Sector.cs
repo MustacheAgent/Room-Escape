@@ -12,7 +12,7 @@ namespace Rooms
         private void Awake()
         {
             _dissolvables = GetComponentsInChildren<Dissolve>();
-            _interactables = GetComponentsInChildren<IInteractable>();
+            _interactables = transform.GetComponentsInFirstChildren<IInteractable>();
         }
 
         /// <summary>

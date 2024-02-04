@@ -315,6 +315,8 @@ GameObject:
   - component: {fileID: 7757014377187205254}
   - component: {fileID: 55649710624102430}
   - component: {fileID: 5530005206606092615}
+  - component: {fileID: 1194051222669437769}
+  - component: {fileID: 5662350691206718235}
   m_Layer: 6
   m_Name: Shelf B.002
   m_TagString: Untagged
@@ -401,6 +403,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 1
+--- !u!114 &1194051222669437769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4736632813197003209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3399a900f90b4167abfaef35ebff7fe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateAngle: -90
+--- !u!64 &5662350691206718235
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4736632813197003209}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6856888474039484261, guid: 0685410f911a12248bafe91dbe4771ee, type: 3}
 --- !u!1 &8181710522009112115
 GameObject:
   m_ObjectHideFlags: 0

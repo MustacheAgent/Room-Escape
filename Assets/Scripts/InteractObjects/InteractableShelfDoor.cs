@@ -20,7 +20,9 @@ namespace InteractObjects
         
         public void Interact()
         {
-            _pivot.DOLocalRotate(new Vector3(0f, rotateAngle * _side, 0f), 1f);
+            var eulerAngles = _pivot.localRotation.eulerAngles;
+            var newAngle = new Vector3(eulerAngles.x, eulerAngles.y + rotateAngle * _side, eulerAngles.z);
+            _pivot.DOLocalRotate(newAngle, 1f);
             _side = -_side;
         }
 

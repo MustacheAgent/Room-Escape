@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using EventBusSystem;
 using Events.CameraEvents;
+using InteractObjects;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace InteractObjects
+namespace Managers
 {
     public class InteractManager : MonoBehaviour
     {
@@ -57,8 +58,12 @@ namespace InteractObjects
             var obj = hit.transform.GetComponent<IInteractable>();
             if (obj != null && obj.Enabled)
             {
-                _currentContainer = hit.transform.GetComponent<InteractableContainer>();
-                if (_currentContainer) _containers.Push(_currentContainer);
+                var container = hit.transform.GetComponent<InteractableContainer>();
+                if (container)
+                {
+                    _currentContainer = container;
+                    _containers.Push(_currentContainer);
+                }
                 obj.Interact();
                 Debug.Log("interactable: " + hit.transform.gameObject);
             }
@@ -66,13 +71,14 @@ namespace InteractObjects
 
         private void OnReturn(InputAction.CallbackContext input)
         {
-            if (_containers.Count > 0)
+            if (_containers.Count > 1)
             {
                 var obj = _containers.Pop();
                 if (obj != null)
                 {
-                    obj.SetChildrenActive(false);
-                    obj.SetEnabled(true);
+                    _currentContainer.SetChildrenActive(false);
+                    _currentContainer.SetEnabled(true);
+                    _currentContainer = obj;
                     EventBus.Raise<ICameraLookAt>(h => h.LookAt(obj));
                 }
             }
@@ -80,6 +86,8 @@ namespace InteractObjects
             {
                 _currentContainer.SetChildrenActive(false);
                 _currentContainer.SetEnabled(true);
+                _currentContainer = null;
+                _containers.Clear();
                 EventBus.Raise<ICameraReset>(h => h.ResetRig());
             }
         }
