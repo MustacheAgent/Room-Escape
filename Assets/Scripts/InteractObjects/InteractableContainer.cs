@@ -9,6 +9,7 @@ namespace InteractObjects
     {
         [field:SerializeField] public float xAngle { get; private set; }
         [field:SerializeField] public float distance { get; private set; }
+        [field:SerializeField] public float yAngle { get; private set; }
 
         private IInteractable[] _childrenObjects;
 

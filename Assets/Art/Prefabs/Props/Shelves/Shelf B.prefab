@@ -71,6 +71,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <xAngle>k__BackingField: 20
   <distance>k__BackingField: 7
+  <yAngle>k__BackingField: 10
 --- !u!1 &3247061336110454593
 GameObject:
   m_ObjectHideFlags: 0
