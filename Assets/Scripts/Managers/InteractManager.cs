@@ -65,7 +65,6 @@ namespace Managers
                     _containers.Push(_currentContainer);
                 }
                 obj.Interact();
-                Debug.Log("interactable: " + hit.transform.gameObject);
             }
         }
 

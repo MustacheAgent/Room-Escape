@@ -6,8 +6,8 @@ namespace InteractObjects
 {
     public class InteractableContainer : MonoBehaviour, IInteractable
     {
-        [field:SerializeField] public float Angle { get; private set; }
-        [field:SerializeField] public float Distance { get; private set; }
+        [field:SerializeField] public float xAngle { get; private set; }
+        [field:SerializeField] public float distance { get; private set; }
         
         public bool Enabled => _collider.enabled;
         

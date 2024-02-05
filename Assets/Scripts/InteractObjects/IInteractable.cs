@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace InteractObjects
+﻿namespace InteractObjects
 {
     public interface IInteractable
     {

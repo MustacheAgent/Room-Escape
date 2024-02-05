@@ -15,7 +15,7 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
     private bool _canRotate = true;
     private float _rotationAngle;
     
-    private Transform _swivel; 
+    private Transform _swivel;
     private float _swivelDefaultXAngle;
     
     private Transform _stick;
@@ -94,10 +94,10 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
         _transform.DOMove(obj.transform.position, 1);
         
         // rotate swivel x axis to look approximately on object
-        _swivel.DOLocalRotate(new Vector3(obj.Angle, 0, 0), 1);
+        _swivel.DOLocalRotate(new Vector3(obj.xAngle, 0, 0), 1);
         
         // move stick z axis to zoom in on object
-        _stick.DOLocalMove(new Vector3(0, 0, -obj.Distance), 1);
+        _stick.DOLocalMove(new Vector3(0, 0, -obj.distance), 1);
         
         // disable rig rotation
         _canRotate = false;
