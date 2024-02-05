@@ -1,35 +1,28 @@
-﻿using Events.CameraEvents;
+﻿using Events;
+using Events.CameraEvents;
 using UnityEngine;
 using EventBus = EventBusSystem.EventBus;
 
 namespace InteractObjects
 {
-    public class InteractableContainer : MonoBehaviour, IInteractable
+    public class InteractableContainer : InteractableObject
     {
         [field:SerializeField] public float xAngle { get; private set; }
         [field:SerializeField] public float distance { get; private set; }
-        
-        public bool Enabled => _collider.enabled;
-        
-        private Collider _collider;
 
         private IInteractable[] _childrenObjects;
-
-        private void Awake()
-        {
-            _collider = GetComponent<Collider>();
-        }
 
         private void Start()
         {
             _childrenObjects = GetComponentsInChildren<IInteractable>();
         }
 
-        public void Interact()
+        public override void Interact()
         {
             SetChildrenActive(true);
             SetEnabled(false);
             EventBus.Raise<ICameraLookAt>(h=> h.LookAt(this));
+            EventBus.Raise<IInteractContainer>(h=> h.OnInteractContainer(this));
         }
 
         public void SetChildrenActive(bool isActive)
@@ -38,11 +31,6 @@ namespace InteractObjects
             {
                 child.SetEnabled(isActive);
             }
-        }
-
-        public void SetEnabled(bool isEnabled)
-        {
-            _collider.enabled = isEnabled;
         }
     }
 }

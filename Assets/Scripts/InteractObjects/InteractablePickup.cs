@@ -1,32 +1,18 @@
 ﻿using EventBusSystem;
 using Events;
+using Items;
 using UnityEngine;
 
 namespace InteractObjects
 {
-    [RequireComponent(typeof(Item))]
-    public class InteractablePickup : MonoBehaviour, IInteractable
+    public class InteractablePickup : InteractableObject
     {
-        public bool Enabled => _collider.enabled;
+        [SerializeField] private Item item;
         
-        private Collider _collider;
-        private Item _item;
-
-        private void Awake()
+        public override void Interact()
         {
-            _collider = GetComponent<Collider>();
-            _item = GetComponent<Item>();
-        }
-        
-        public void Interact()
-        {
-            EventBus.Raise<IInventoryItem>(h => h.OnItemAdded(_item));
+            EventBus.Raise<IInventoryItem>(h => h.OnItemAdded(item));
             Destroy(gameObject);
-        }
-
-        public void SetEnabled(bool isEnabled)
-        {
-            _collider.enabled = isEnabled;
         }
     }
 }

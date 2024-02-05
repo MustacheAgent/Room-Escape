@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using EventBusSystem;
+using Events;
 using Events.CameraEvents;
 using InteractObjects;
 using UnityEngine;
@@ -7,12 +8,11 @@ using UnityEngine.InputSystem;
 
 namespace Managers
 {
-    public class InteractManager : MonoBehaviour
+    public class InteractManager : MonoBehaviour, IInteractContainer
     {
         public LayerMask layer;
 
         private PlayerInput _playerInput;
-        private InputAction _interaction;
         private InputAction _return;
     
         private Camera _mainCamera;
@@ -23,7 +23,6 @@ namespace Managers
         private void Awake()
         {
             _playerInput = new PlayerInput();
-            _interaction = _playerInput.InteractControls.Select;
             _return = _playerInput.InteractControls.Return;
 
             _mainCamera = Camera.main;
@@ -33,60 +32,46 @@ namespace Managers
 
         private void OnEnable()
         {
-            _interaction.performed += OnSelect;
             _return.performed += OnReturn;
             _playerInput.InteractControls.Enable();
+            
+            EventBus.Subscribe(this);
         }
 
         private void OnDisable()
         {
-            _interaction.performed -= OnSelect;
             _return.performed -= OnReturn;
             _playerInput.InteractControls.Disable();
+            
+            EventBus.Unsubscribe(this);
         }
 
-        private void OnSelect(InputAction.CallbackContext input)
+        public void OnInteractContainer(InteractableContainer container)
         {
-            var ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-            
-            if (!Physics.Raycast(ray, out var hit, float.MaxValue, layer))
+            if (_currentContainer != null)
             {
-                Debug.Log("No hit");
-                return;
+                _containers.Push(_currentContainer);
             }
             
-            var obj = hit.transform.GetComponent<IInteractable>();
-            if (obj != null && obj.Enabled)
-            {
-                var container = hit.transform.GetComponent<InteractableContainer>();
-                if (container)
-                {
-                    _currentContainer = container;
-                    _containers.Push(_currentContainer);
-                }
-                obj.Interact();
-            }
+            _currentContainer = container;
         }
 
         private void OnReturn(InputAction.CallbackContext input)
         {
-            if (_containers.Count > 1)
+            _currentContainer.SetChildrenActive(false);
+            _currentContainer.SetEnabled(true);
+            if (_containers.Count > 0)
             {
                 var obj = _containers.Pop();
                 if (obj != null)
                 {
-                    _currentContainer.SetChildrenActive(false);
-                    _currentContainer.SetEnabled(true);
                     _currentContainer = obj;
-                    EventBus.Raise<ICameraLookAt>(h => h.LookAt(obj));
+                    EventBus.Raise<ICameraLookAt>(h => h.LookAt(_currentContainer));
                 }
             }
             else
             {
-                _currentContainer.SetChildrenActive(false);
-                _currentContainer.SetEnabled(true);
                 _currentContainer = null;
-                _containers.Clear();
                 EventBus.Raise<ICameraReset>(h => h.ResetRig());
             }
         }

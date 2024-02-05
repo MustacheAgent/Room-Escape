@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using EventBusSystem;
 using Events;
+using Items;
 using UnityEngine;
 
 namespace Managers
 {
     public class InventoryManager : MonoBehaviour, IInventoryItem
     {
-        [SerializeField] private List<Item> _items;
+        //[SerializeField] private Inventory inventory;
+        [SerializeField] private List<Item> items;
 
-        private void Awake()
+        private void Start()
         {
-            _items = new List<Item>();
+            items = new List<Item>();
         }
 
         private void OnEnable()
@@ -26,13 +29,13 @@ namespace Managers
 
         public void OnItemAdded(Item addedItem)
         {
-            _items.Add(addedItem);
-            Debug.Log("added item: " + addedItem.gameObject);
+            if (addedItem != null) items.Add(addedItem);
+            Debug.Log("added item: " + addedItem);
         }
 
         public void OnItemRemoved(Item removedItem)
         {
-            _items.Remove(removedItem);
+            items.Remove(removedItem);
         }
     }
 }

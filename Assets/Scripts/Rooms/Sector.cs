@@ -33,7 +33,7 @@ namespace Rooms
                     interactable.SetEnabled(!hide);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Debug.LogError(e + " ==== " + gameObject);
             }

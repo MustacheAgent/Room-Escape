@@ -13,8 +13,7 @@ GameObject:
   - component: {fileID: 148064019205122750}
   - component: {fileID: 720827367023706185}
   - component: {fileID: 488314224337901974}
-  - component: {fileID: 7921865670785454408}
-  - component: {fileID: 5698932308796977254}
+  - component: {fileID: 3307553296472824619}
   m_Layer: 6
   m_Name: Alarm Clock
   m_TagString: Untagged
@@ -123,19 +122,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8760190692210354781, guid: c354bab72cbef074aa5d0acc96580083, type: 3}
---- !u!114 &7921865670785454408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1375516396768767760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96ad5717d3af45f093e85c7cf06427db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5698932308796977254
+--- !u!114 &3307553296472824619
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,3 +134,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124a4b87eed54f9181dde73ceebf65ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item:
+    name: Alarm Clock

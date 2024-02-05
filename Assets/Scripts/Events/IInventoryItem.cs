@@ -1,4 +1,5 @@
 ﻿using EventBusSystem;
+using Items;
 
 namespace Events
 {

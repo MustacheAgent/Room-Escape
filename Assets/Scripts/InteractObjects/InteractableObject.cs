@@ -1,26 +1,29 @@
+using System;
 using UnityEngine;
 
 namespace InteractObjects
 {
-    public class InteractableObject : MonoBehaviour, IInteractable
+    public abstract class InteractableObject : MonoBehaviour, IInteractable
     {
-        public bool Enabled => _collider.enabled;
+        public bool Enabled => Collider.enabled;
 
-        private Collider _collider;
+        protected Collider Collider;
 
-        private void Awake()
+        protected void Awake()
         {
-            _collider = GetComponent<Collider>();
+            Collider = GetComponent<Collider>();
         }
 
-        public void Interact()
+        private void OnMouseDown()
         {
-            //EventBus.Raise<ICameraLookAt>(h => h.LookAt(this));
+            Interact();
         }
 
-        public void SetEnabled(bool isEnabled)
+        public abstract void Interact();
+
+        public virtual void SetEnabled(bool isEnabled)
         {
-            _collider.enabled = isEnabled;
+            Collider.enabled = isEnabled;
         }
     }
 }
