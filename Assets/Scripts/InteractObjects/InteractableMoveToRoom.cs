@@ -6,33 +6,20 @@ using UnityEngine;
 
 namespace InteractObjects
 {
-    public class InteractableMoveToRoom : MonoBehaviour, IInteractable
+    public class InteractableMoveToRoom : InteractableObject
     {
         [SerializeField] private Room roomToMove;
 
-        public bool Enabled => _collider.enabled;
-
         [SerializeField] private bool loop;
         [SerializeField] private Transform loopPosition;
-        private Collider _collider;
 
-        private void Awake()
-        {
-            _collider = GetComponent<Collider>();
-        }
-
-        public void Interact()
+        public override void Interact()
         {
             if (loop)
             {
                 EventBus.Raise<ICameraLoopPosition>(h => h.LoopPosition(loopPosition));
             }
             EventBus.Raise<IRoomChanged>(h => h.OnRoomChanged(roomToMove));
-        }
-
-        public void SetEnabled(bool active)
-        {
-            _collider.enabled = active;
         }
     }
 }
