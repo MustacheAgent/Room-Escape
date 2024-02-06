@@ -77,6 +77,9 @@ GameObject:
   - component: {fileID: 799231939545352944}
   - component: {fileID: 4296923757826367729}
   - component: {fileID: 8094177079645888004}
+  - component: {fileID: 3594516888168997154}
+  - component: {fileID: 8392146144397712801}
+  - component: {fileID: 1646417949665372563}
   m_Layer: 0
   m_Name: Door B
   m_TagString: Untagged
@@ -162,6 +165,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 1
+--- !u!114 &3594516888168997154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7156095934672982228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea3d5b4d1e9471bbc12c62782a31ab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomToMove: {fileID: 0}
+  loop: 0
+  loopPosition: {fileID: 0}
+--- !u!114 &8392146144397712801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7156095934672982228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d01dcf6a8d447d18802a58d74ab204b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyString: 
+  openAngle: 15
+--- !u!64 &1646417949665372563
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7156095934672982228}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2683810436501584949, guid: cc1bbd128eab0684ab0c7efc0d5bebb2, type: 3}
 --- !u!1 &8359586373001808697
 GameObject:
   m_ObjectHideFlags: 0

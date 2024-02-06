@@ -16,7 +16,7 @@ namespace InteractObjects
 
         private void OnMouseDown()
         {
-            Interact();
+            if (enabled) Interact();
         }
 
         public abstract void Interact();
