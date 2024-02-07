@@ -1,18 +1,31 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using Events;
+using Items;
 using UnityEngine;
 
-public class InventoryPanel : MonoBehaviour
+namespace UI
 {
-    // Start is called before the first frame update
-    void Start()
+    public class InventoryPanel : MonoBehaviour, IInventoryItem
     {
-        
-    }
+        [SerializeField] private InventoryButton buttonPrefab;
+        private List<InventoryButton> _buttons;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void Start()
+        {
+            _buttons = new List<InventoryButton>();
+        }
+
+        public void OnItemAdded(Item addedItem)
+        {
+            _buttons.Add(Instantiate(buttonPrefab, transform));
+        }
+
+        public void OnItemRemoved(Item removedItem)
+        {
+            var button = _buttons.Find(t => t.AssociatedItem == removedItem);
+            _buttons.Remove(button);
+            Destroy(button);
+        }
     }
 }
