@@ -11,6 +11,8 @@ namespace Managers
     {
         //[SerializeField] private Inventory inventory;
         [SerializeField] private List<Item> items;
+        
+        public Item SelectedItem { get; private set; }
 
         private void Start()
         {
@@ -30,12 +32,18 @@ namespace Managers
         public void OnItemAdded(Item addedItem)
         {
             if (addedItem != null) items.Add(addedItem);
-            Debug.Log("added item: " + addedItem);
+            Debug.Log("added item: " + addedItem.name);
         }
 
         public void OnItemRemoved(Item removedItem)
         {
             items.Remove(removedItem);
+            Debug.Log("removed item: " + removedItem.name);
+        }
+
+        public void OnItemSelected(Item selectedItem)
+        {
+            SelectedItem = selectedItem;
         }
     }
 }
