@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using EventBusSystem;
 using Events;
+using Events.InventoryEvents;
 using Items;
 using UnityEngine;
 
@@ -45,9 +45,11 @@ namespace UI
 
         public void OnItemSelected(Item selectedItem)
         {
-            foreach (var button in _buttons)
+            if (_selectedButton != null) _selectedButton.SetSelected(false);
+            if (selectedItem != null)
             {
-                button.SetSelected(false);
+                _selectedButton = _buttons.Find(t => t.AssociatedItem == selectedItem);
+                _selectedButton.SetSelected(true);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using EventBusSystem;
 using Events;
+using Events.InventoryEvents;
 using Items;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace UI
     {
         [SerializeField] private TextMeshProUGUI buttonText;
         [SerializeField] private GameObject selectedPanel;
+
+        private bool _selected = false;
         
         public Item AssociatedItem { get; private set; }
 
@@ -23,7 +26,6 @@ namespace UI
         public void OnPointerClick(PointerEventData eventData)
         {
             EventBus.Raise<IInventoryItem>(h => h.OnItemSelected(selectedPanel.activeInHierarchy ? null : AssociatedItem));
-            SetSelected(!selectedPanel.activeInHierarchy);
         }
 
         public void SetSelected(bool isSelected)

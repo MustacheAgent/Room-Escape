@@ -4,5 +4,6 @@
     public class Item
     {
         public string name;
+        public string keyString;
     }
 }

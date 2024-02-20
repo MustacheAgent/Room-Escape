@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EventBusSystem;
-using Events;
+using Events.InventoryEvents;
 using Items;
 using UnityEngine;
 

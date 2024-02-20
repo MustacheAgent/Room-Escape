@@ -7,7 +7,7 @@ namespace InteractObjects
     public class InteractableDoor : InteractableObject
     {
         [SerializeField] private string keyString;
-        public InteractableMoveToRoom _moveToRoom;
+        private InteractableMoveToRoom _moveToRoom;
         private Transform _doorPivot;
         [SerializeField] private float openAngle = 15f;
 
@@ -24,7 +24,7 @@ namespace InteractObjects
             angle.y += openAngle;
             _doorPivot.DOLocalRotate(angle, .5f);
             _moveToRoom.enabled = true;
-            this.enabled = false;
+            Destroy(this);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using EventBusSystem;
 using Items;
 
-namespace Events
+namespace Events.InventoryEvents
 {
     public interface IInventoryItem : IGlobalSubscriber
     {
