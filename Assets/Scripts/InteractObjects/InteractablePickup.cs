@@ -1,5 +1,5 @@
 ﻿using EventBusSystem;
-using Events;
+using Events.InventoryEvents;
 using Items;
 using UnityEngine;
 

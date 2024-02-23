@@ -1,5 +1,4 @@
 ﻿using EventBusSystem;
-using Events;
 using Events.InventoryEvents;
 using Items;
 using TMPro;
@@ -12,8 +11,6 @@ namespace UI
     {
         [SerializeField] private TextMeshProUGUI buttonText;
         [SerializeField] private GameObject selectedPanel;
-
-        private bool _selected = false;
         
         public Item AssociatedItem { get; private set; }
 

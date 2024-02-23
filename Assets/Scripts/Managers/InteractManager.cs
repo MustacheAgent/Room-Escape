@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 namespace Managers
 {
-    public class InteractManager : MonoBehaviour, IInteractContainer
+    public class InteractManager : MonoBehaviour, IService, IInteractContainer
     {
         public LayerMask layer;
 

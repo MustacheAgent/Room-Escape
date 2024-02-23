@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using Managers;
 using UnityEngine;
 
 namespace InteractObjects
@@ -20,6 +21,8 @@ namespace InteractObjects
 
         public override void Interact()
         {
+            var item = ServiceLocator.Current.GetService<InventoryManager>().SelectedItem;
+            Debug.Log(item);
             var angle = _doorPivot.localRotation.eulerAngles;
             angle.y += openAngle;
             _doorPivot.DOLocalRotate(angle, .5f);

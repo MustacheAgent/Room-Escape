@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class InventoryManager : MonoBehaviour, IInventoryItem
+    public class InventoryManager : MonoBehaviour, IInventoryItem, IService
     {
         //[SerializeField] private Inventory inventory;
         [SerializeField] private List<Item> items;
@@ -31,13 +31,11 @@ namespace Managers
         public void OnItemAdded(Item addedItem)
         {
             if (addedItem != null) items.Add(addedItem);
-            Debug.Log("added item: " + addedItem.name);
         }
 
         public void OnItemRemoved(Item removedItem)
         {
             items.Remove(removedItem);
-            Debug.Log("removed item: " + removedItem.name);
         }
 
         public void OnItemSelected(Item selectedItem)

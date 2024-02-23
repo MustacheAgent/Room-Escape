@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class RoomManager : MonoBehaviour, IRoomChanged, ICameraRotate
+    public class RoomManager : MonoBehaviour, IService, IRoomChanged, ICameraRotate
     {
         [SerializeField] private Room firstRoom;
     
