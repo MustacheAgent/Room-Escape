@@ -11,7 +11,7 @@ namespace Managers
         //[SerializeField] private Inventory inventory;
         [SerializeField] private List<Item> items;
         
-        public Item SelectedItem { get; private set; }
+        public static Item SelectedItem { get; private set; }
 
         private void Start()
         {
@@ -41,6 +41,7 @@ namespace Managers
         public void OnItemSelected(Item selectedItem)
         {
             SelectedItem = selectedItem;
+            Debug.Log("Selected item: " + SelectedItem?.name);
         }
     }
 }

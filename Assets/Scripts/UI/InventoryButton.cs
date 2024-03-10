@@ -14,15 +14,19 @@ namespace UI
         
         public Item AssociatedItem { get; private set; }
 
+        private bool _selected;
+
         public void Init(Item associatedItem)
         {
             AssociatedItem = associatedItem;
             buttonText.text = AssociatedItem.name;
+            _selected = false;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            EventBus.Raise<IInventoryItem>(h => h.OnItemSelected(selectedPanel.activeInHierarchy ? null : AssociatedItem));
+            EventBus.Raise<IInventoryItem>(h => h.OnItemSelected(_selected ? null : AssociatedItem));
+            _selected = !_selected;
         }
 
         public void SetSelected(bool isSelected)

@@ -7,9 +7,9 @@ namespace InteractObjects
 {
     public class InteractableContainer : InteractableObject
     {
-        [field:SerializeField] public float xAngle { get; private set; }
-        [field:SerializeField] public float distance { get; private set; }
-        [field:SerializeField] public float yAngle { get; private set; }
+        [field: SerializeField] public float xAngle { get; private set; }
+        [field: SerializeField] public float distance { get; private set; }
+        [field: SerializeField] public float yAngle { get; private set; }
 
         private IInteractable[] _childrenObjects;
 
@@ -22,15 +22,16 @@ namespace InteractObjects
         {
             SetChildrenActive(true);
             SetEnabled(false);
-            EventBus.Raise<ICameraLookAt>(h=> h.LookAt(this));
-            EventBus.Raise<IInteractContainer>(h=> h.OnInteractContainer(this));
+            EventBus.Raise<ICameraLookAt>(h => h.LookAt(this));
+            EventBus.Raise<IInteractContainer>(h => h.OnInteractContainer(this));
         }
 
         public void SetChildrenActive(bool isActive)
         {
             foreach (var child in _childrenObjects)
             {
-                child.SetEnabled(isActive);
+                if ((MonoBehaviour)child != null)                    
+                    child.SetEnabled(isActive);
             }
         }
     }

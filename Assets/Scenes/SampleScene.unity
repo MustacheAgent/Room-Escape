@@ -16137,6 +16137,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alarm Clock
       objectReference: {fileID: 0}
+    - target: {fileID: 3307553296472824619, guid: 51aa09d7e6f057e408eefbcbefa6f95b,
+        type: 3}
+      propertyPath: item.keyString
+      value: 1234
+      objectReference: {fileID: 0}
     - target: {fileID: 6993316159451371942, guid: 51aa09d7e6f057e408eefbcbefa6f95b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -24406,6 +24411,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Door B
+      objectReference: {fileID: 0}
+    - target: {fileID: 8392146144397712801, guid: f3488c71678ed3c4780af14b379c3a61,
+        type: 3}
+      propertyPath: keyString
+      value: 1234
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
