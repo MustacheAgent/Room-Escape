@@ -122,7 +122,7 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
 
     public void OnRoomChanged(Room newRoom)
     {
-        _rigDefaultPosition = newRoom.transform.position;
+        _rigDefaultPosition = newRoom.ViewPoint.position;
         ResetRig();
     }
 

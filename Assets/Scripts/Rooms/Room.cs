@@ -4,6 +4,10 @@ namespace Rooms
 {
     public class Room : MonoBehaviour
     {
+        [SerializeField] private Transform viewPoint;
+
+        public Transform ViewPoint => viewPoint;
+        
         private Sector[] _sectors;
 
         private void Awake()
