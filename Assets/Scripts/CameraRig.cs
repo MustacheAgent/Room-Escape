@@ -23,6 +23,10 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
 
     private Transform _transform;
     private Vector3 _rigDefaultPosition;
+
+    private float _orthographicSizeDefault;
+
+    private Camera _cam; 
     
     private PlayerInput _playerInput;
 
@@ -37,6 +41,13 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
 
         _swivelDefaultXAngle = _swivel.rotation.eulerAngles.x;
         _stickDefaultZPos = _stick.localPosition.z;
+
+        _cam = Camera.main;
+
+        if (_cam.orthographic)
+        {
+            _orthographicSizeDefault = _cam.orthographicSize;
+        }
 
         _playerInput = new PlayerInput();
     }
@@ -100,9 +111,16 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
         
         // rotate swivel x axis to look approximately on object
         _swivel.DOLocalRotate(new Vector3(obj.xAngle, 0, 0), 1);
-        
-        // move stick z axis to zoom in on object
-        _stick.DOLocalMove(new Vector3(0, 0, -obj.distance), 1);
+
+        if (_cam.orthographic)
+        {
+            _cam.DOOrthoSize(obj.distance, 1);
+        }
+        else
+        {
+            // move stick z axis to zoom in on object
+            _stick.DOLocalMove(new Vector3(0, 0, -obj.distance), 1);
+        }
         
         // disable rig rotation
         _canRotate = false;
@@ -116,7 +134,16 @@ public class CameraRig : MonoBehaviour, ICameraReset, IRoomChanged, ICameraLookA
         _transform.DOMove(_rigDefaultPosition, 1);
         _transform.DORotate(new Vector3(0f, _rotationAngle, 0f), 1f);
         _swivel.DOLocalRotate(new Vector3(_swivelDefaultXAngle, 0, 0), 1);
-        _stick.DOLocalMove(new Vector3(0, 0, _stickDefaultZPos), 1);
+
+        if (_cam.orthographic)
+        {
+            _cam.DOOrthoSize(_orthographicSizeDefault, 1);
+        }
+        else
+        {
+            _stick.DOLocalMove(new Vector3(0, 0, _stickDefaultZPos), 1);
+        }
+        
         _canRotate = true;
     }
 
